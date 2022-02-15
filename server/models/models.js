@@ -1,92 +1,112 @@
 const sequelize = require('../db')
 const {DataTypes} = require('sequelize')
 
-const User = sequelize.define('user', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    email: {type: DataTypes.STRING, unique: true,},
-    password: {type: DataTypes.STRING},
-    role: {type: DataTypes.STRING, defaultValue: "USER"},
+const Proposal = sequelize.define('proposal', {
+    proposal_id:{type: DataTypes.INTEGER, primaryKey: true},
+    proposal_name:{type: DataTypes.STRING},
+    description:{type: DataTypes.STRING}
 })
 
-const Basket = sequelize.define('basket', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+const Catalogue = sequelize.define('catalogue', {
+    proposal_id: {type: DataTypes.INTEGER, primaryKey: true},
+    addition_date: {type: DataTypes.DATE},
+    price_per_year: {type: DataTypes.INTEGER},
 })
 
-const BasketDevice = sequelize.define('basket_device', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+const Selected = sequelize.define('selected', {
+    //id:{type: DataTypes.INTEGER, primaryKey: true},
+    // user_id: {type: DataTypes.INTEGER},
+    // proposal_id: {type: DataTypes.INTEGER},
+    adding_date: {type: DataTypes.DATE},
 })
 
-const Device = sequelize.define('device', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
-    price: {type: DataTypes.INTEGER, allowNull: false},
-    rating: {type: DataTypes.INTEGER, defaultValue: 0},
-    img: {type: DataTypes.STRING, allowNull: false},
+const EnsuranceRequests = sequelize.define('ensurance_requests', {
+    // contract_id: {type: DataTypes.INTEGER},
+    user_comment: {type: DataTypes.STRING},
+    photo_approvement: {type: DataTypes.BLOB},
+    request_date: {type: DataTypes.DATE},
+    status: {type: DataTypes.STRING},
+    // transaction_id: {type: DataTypes.INTEGER},
 })
 
-const Type = sequelize.define('type', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+const Contracts = sequelize.define('contracts', {
+    contract_id: {type: DataTypes.INTEGER, primaryKey: true},
+    // user_id: {type: DataTypes.INTEGER},
+    // proposal_id: {type: DataTypes.INTEGER},
+    real_price: {type: DataTypes.INTEGER},
+    status: {type: DataTypes.STRING},
+    request_date: {type: DataTypes.DATE},
 })
 
-const Brand = sequelize.define('brand', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+const Users = sequelize.define('users', {
+    user_id: {type: DataTypes.INTEGER, primaryKey: true},
+    first_name: {type: DataTypes.STRING},
+    last_name: {type: DataTypes.STRING},
+    passwordHash: {type: DataTypes.STRING},
+    email: {type: DataTypes.STRING},
+    passportNumber: {type: DataTypes.STRING},
+    phone_number: {type: DataTypes.STRING},
+    bank_number: {type: DataTypes.STRING},
+    // role_id: {type: DataTypes.STRING},
+    status: {type: DataTypes.STRING},
 })
 
-const Rating = sequelize.define('rating', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    rate: {type: DataTypes.INTEGER, allowNull: false},
+const Roles = sequelize.define('roles', {
+    role_id: {type: DataTypes.INTEGER, primaryKey: true},
+    role_name: {type: DataTypes.STRING},
 })
 
-const DeviceInfo = sequelize.define('device_info', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.STRING, allowNull: false},
+const Transactions = sequelize.define('transactions', {
+    transaction_id: {type: DataTypes.INTEGER, primaryKey: true},
+    transaction_sum: {type: DataTypes.INTEGER},
+    transaction_date: {type: DataTypes.DATE},
+    sender_bank_number: {type: DataTypes.STRING},
+    reciever_bank_number: {type: DataTypes.STRING},
 })
 
-const TypeBrand = sequelize.define('type_brand', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+const ContractTransactions = sequelize.define('contract_transactions', {
+   // contract_id: {type: DataTypes.INTEGER},
+   // transaction_id: {type: DataTypes.INTEGER},
 })
 
 
-User.hasOne(Basket)
-Basket.belongsTo(User)
+Proposal.hasOne(Catalogue)
+Catalogue.belongsTo(Proposal)
 
-User.hasMany(Rating)
-Rating.belongsTo(User)
+Catalogue.hasMany(Selected)
+Selected.belongsTo(Catalogue)
 
-Basket.hasMany(BasketDevice)
-BasketDevice.belongsTo(Basket)
+Users.hasMany(Selected)
+Selected.belongsTo(Users)
 
-Type.hasMany(Device)
-Device.belongsTo(Type)
+Roles.hasMany(Users)
+Users.belongsTo(Roles)
 
-Brand.hasMany(Device)
-Device.belongsTo(Brand)
+Users.hasMany(Contracts)
+Contracts.belongsTo(Users)
 
-Device.hasMany(Rating)
-Rating.belongsTo(Device)
+Catalogue.hasMany(Contracts)
+Contracts.belongsTo(Catalogue)
 
-Device.hasMany(BasketDevice)
-BasketDevice.belongsTo(Device)
+Transactions.hasOne(ContractTransactions)
+ContractTransactions.belongsTo(Transactions)
 
-Device.hasMany(DeviceInfo, {as: 'info'});
-DeviceInfo.belongsTo(Device)
+ContractTransactions.hasMany(Contracts)
+Contracts.belongsTo(ContractTransactions)
 
-Type.belongsToMany(Brand, {through: TypeBrand })
-Brand.belongsToMany(Type, {through: TypeBrand })
+////////////////////////////////
+
 
 module.exports = {
-    User,
-    Basket,
-    BasketDevice,
-    Device,
-    Type,
-    Brand,
-    Rating,
-    TypeBrand,
-    DeviceInfo
+    Proposal,
+    Catalogue,
+    Users,
+    Selected,
+    EnsuranceRequests,
+    Roles,
+    Transactions,
+    Contracts,
+    ContractTransactions
 }
 
 
