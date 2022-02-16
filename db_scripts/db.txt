@@ -1,0 +1,83 @@
+INSERT INTO public.proposals(
+	proposal_name, description, "createdAt", "updatedAt")
+	VALUES ('based', 'selling garage','1999-01-08 04:05:06','1999-01-08 04:05:06');
+INSERT INTO public.proposals(
+	proposal_name, description, "createdAt", "updatedAt")
+	VALUES ('advanced', 'slaving ourselves','1999-01-08 04:05:06','1999-01-08 04:05:06');
+INSERT INTO public.proposals(
+	proposal_name, description, "createdAt", "updatedAt")
+	VALUES ('VIP', 'slaving yourself','1999-01-08 04:05:06','1999-01-08 04:05:06');	
+
+INSERT INTO public.catalogues(
+	addition_date, price_per_year, "createdAt", "updatedAt", "proposalProposalId")
+	VALUES ('1999-01-08 04:05:06', 165,
+			'1999-01-08 04:05:06', '1999-01-08 04:05:06', 1);
+INSERT INTO public.catalogues(
+	addition_date, price_per_year, "createdAt", "updatedAt", "proposalProposalId")
+	VALUES ('1999-01-08 04:05:06', 300,
+			'1999-01-08 04:05:06', '1999-01-08 04:05:06', 2);
+INSERT INTO public.catalogues(
+	addition_date, price_per_year, "createdAt", "updatedAt", "proposalProposalId")
+	VALUES ('1999-01-08 04:05:06', 0,
+			'1999-01-08 04:05:06', '1999-01-08 04:05:06', 3);
+
+INSERT INTO public.roles(
+	role_name, "createdAt", "updatedAt")
+	VALUES ('User', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+INSERT INTO public.roles(
+	role_name, "createdAt", "updatedAt")
+	VALUES ('Director', '1999-01-08 04:05:06', '1999-01-08 04:05:06');	
+INSERT INTO public.roles(
+	role_name, "createdAt", "updatedAt")
+	VALUES ('Jurist', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+INSERT INTO public.roles(
+	role_name, "createdAt", "updatedAt")
+	VALUES ('boss of the gym', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+INSERT INTO public.roles(
+	role_name, "createdAt", "updatedAt")
+	VALUES ('slave', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+
+INSERT INTO public.users(
+	first_name, last_name, "passwordHash", email, "passportNumber", phone_number, bank_number, status, "createdAt", "updatedAt", "roleRoleId")
+	VALUES ('Pavel', 'Rafeev', '######', '#####', '####', '####', '####', 'active', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 2);
+INSERT INTO public.users(
+	first_name, last_name, "passwordHash", email, "passportNumber", phone_number, bank_number, status, "createdAt", "updatedAt", "roleRoleId")
+	VALUES ('Ilya', 'Labovich', '######', '#####', '####', '####', '####', 'deleted', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 5);
+INSERT INTO public.users(
+	first_name, last_name, "passwordHash", email, "passportNumber", phone_number, bank_number, status, "createdAt", "updatedAt", "roleRoleId")
+	VALUES ('Egor', 'Voitka', '######', '#####', '####', '####', '####', 'unActive', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 4);
+
+INSERT INTO public.contracts(
+	real_price, status, request_date, "createdAt", "updatedAt", "userUserId", "catalogueId")
+	VALUES (0, 'in process', '1999-01-08 04:05:06'
+			, '1999-01-08 04:05:06', '1999-01-08 04:05:06', 2, 3);
+INSERT INTO public.contracts(
+	real_price, status, request_date, "createdAt", "updatedAt", "userUserId", "catalogueId")
+	VALUES (300, 'in process', '1999-01-08 04:05:06'
+			, '1999-01-08 04:05:06', '1999-01-08 04:05:06', 1, 2);
+INSERT INTO public.contracts(
+	real_price, status, request_date, "createdAt", "updatedAt", "userUserId", "catalogueId")
+	VALUES (165, 'approved', '1999-01-08 04:05:06'
+			, '1999-01-08 04:05:06', '1999-01-08 04:05:06', 3, 1);
+
+INSERT INTO public.selecteds(
+	adding_date, "createdAt", "updatedAt", "catalogueId", "userUserId")
+	VALUES ( '1999-01-08 04:05:06', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 1, 1);
+
+INSERT INTO public.transactions(
+	transaction_sum, transaction_date, sender_bank_number, reciever_bank_number, "createdAt", "updatedAt")
+	VALUES (300, '1999-01-08 04:05:06', '####', '####', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+INSERT INTO public.transactions(
+	transaction_sum, transaction_date, sender_bank_number, reciever_bank_number, "createdAt", "updatedAt")
+	VALUES (165, '1999-01-08 04:05:06', '####', '####', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+INSERT INTO public.transactions(
+	transaction_sum, transaction_date, sender_bank_number, reciever_bank_number, "createdAt", "updatedAt")
+	VALUES (0, '1999-01-08 04:05:06', '####', '####', '1999-01-08 04:05:06', '1999-01-08 04:05:06');
+
+INSERT INTO public.ensurance_requests(
+	user_comment, photo_approvement, request_date, status, "createdAt", "updatedAt", "contractContractId", "transactionTransactionId")
+	VALUES ('roof is waterdropping', '/13', '1999-01-08 04:05:06', 'approved', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 2, 1);
+
+INSERT INTO public.contract_transactions(
+	"createdAt", "updatedAt", "transactionTransactionId", "contractContractId")
+	VALUES ( '1999-01-08 04:05:06', '1999-01-08 04:05:06', 1, 1);	

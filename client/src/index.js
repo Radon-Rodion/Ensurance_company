@@ -1,10 +1,11 @@
 import React, {createContext} from 'react';
 import ReactDOM from 'react-dom';
+import App from './app.js';
 
 export const Context = createContext(null)
 
 ReactDOM.render(
-    <div>Hello, guy!</div>,
+    <App />,
   document.getElementById('root')
 );
 
