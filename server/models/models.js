@@ -2,13 +2,13 @@ const sequelize = require('../db')
 const {DataTypes} = require('sequelize')
 
 const Proposal = sequelize.define('proposal', {
-    proposal_id:{type: DataTypes.INTEGER, primaryKey: true},
+    proposal_id:{type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     proposal_name:{type: DataTypes.STRING},
     description:{type: DataTypes.STRING}
 })
 
 const Catalogue = sequelize.define('catalogue', {
-    proposal_id: {type: DataTypes.INTEGER, primaryKey: true},
+    //proposal_id: {type: DataTypes.INTEGER, primaryKey: true},
     addition_date: {type: DataTypes.DATE},
     price_per_year: {type: DataTypes.INTEGER},
 })
@@ -23,14 +23,14 @@ const Selected = sequelize.define('selected', {
 const EnsuranceRequests = sequelize.define('ensurance_requests', {
     // contract_id: {type: DataTypes.INTEGER},
     user_comment: {type: DataTypes.STRING},
-    photo_approvement: {type: DataTypes.BLOB},
+    photo_approvement: {type: DataTypes.BLOB, allowNull:true},
     request_date: {type: DataTypes.DATE},
     status: {type: DataTypes.STRING},
     // transaction_id: {type: DataTypes.INTEGER},
 })
 
 const Contracts = sequelize.define('contracts', {
-    contract_id: {type: DataTypes.INTEGER, primaryKey: true},
+    contract_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     // user_id: {type: DataTypes.INTEGER},
     // proposal_id: {type: DataTypes.INTEGER},
     real_price: {type: DataTypes.INTEGER},
@@ -39,7 +39,7 @@ const Contracts = sequelize.define('contracts', {
 })
 
 const Users = sequelize.define('users', {
-    user_id: {type: DataTypes.INTEGER, primaryKey: true},
+    user_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     first_name: {type: DataTypes.STRING},
     last_name: {type: DataTypes.STRING},
     passwordHash: {type: DataTypes.STRING},
@@ -52,12 +52,12 @@ const Users = sequelize.define('users', {
 })
 
 const Roles = sequelize.define('roles', {
-    role_id: {type: DataTypes.INTEGER, primaryKey: true},
+    role_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     role_name: {type: DataTypes.STRING},
 })
 
 const Transactions = sequelize.define('transactions', {
-    transaction_id: {type: DataTypes.INTEGER, primaryKey: true},
+    transaction_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     transaction_sum: {type: DataTypes.INTEGER},
     transaction_date: {type: DataTypes.DATE},
     sender_bank_number: {type: DataTypes.STRING},
@@ -88,11 +88,14 @@ Contracts.belongsTo(Users)
 Catalogue.hasMany(Contracts)
 Contracts.belongsTo(Catalogue)
 
+EnsuranceRequests.belongsTo(Contracts)
+EnsuranceRequests.belongsTo(Transactions)
+
 Transactions.hasOne(ContractTransactions)
 ContractTransactions.belongsTo(Transactions)
 
-ContractTransactions.hasMany(Contracts)
-Contracts.belongsTo(ContractTransactions)
+Contracts.hasMany(ContractTransactions)
+ContractTransactions.belongsTo(Contracts)
 
 ////////////////////////////////
 
