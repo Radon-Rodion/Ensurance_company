@@ -3,6 +3,6 @@ const router = new Router()
 const transactionsController = require('../controllers/TransactionsController')
 
 
-router.get('/auth', transactionsController.getAll)
+router.get('/', transactionsController.getAll)
 
 module.exports = router

@@ -3,6 +3,6 @@ const router = new Router()
 const selectedController = require('../controllers/SelectedController')
 
 
-router.get('/auth', selectedController.getAll)
+router.get('/', selectedController.getAll)
 
 module.exports = router

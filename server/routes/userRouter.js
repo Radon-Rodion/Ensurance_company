@@ -3,6 +3,6 @@ const router = new Router()
 const userController = require('../controllers/UsersController')
 
 
-router.get('/auth', userController.getAll)
+router.get('/', userController.getAll)
 
 module.exports = router
