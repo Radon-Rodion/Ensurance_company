@@ -2,7 +2,6 @@ import React from "react";
 import TableRow from "./tableRow";
 
 const Table = (props) => {
-  console.log(props);
   return (
     <table>
       <thead>

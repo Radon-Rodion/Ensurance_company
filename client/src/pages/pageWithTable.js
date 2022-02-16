@@ -6,7 +6,6 @@ import getTableData from "../requests";
 
 const PageWithTable = (props) => {
     const requestString = `http://localhost:5000/api${document.location.pathname}`;
-    console.log(requestString);
     const [response, setResponse] = useState({colNames: [], data: []});
     if(!response.colNames.length)
       getTableData(requestString, setResponse);
