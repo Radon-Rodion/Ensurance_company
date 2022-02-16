@@ -12,12 +12,12 @@ const userRouter = require('./UserRouter')
 
 router.use('/catalogue', catalogueRouter)
 router.use('/contracts', contractsRouter)
-router.use('/contract-transactoins', contractTransactoinsRouter)
+router.use('/contract-transactions', contractTransactoinsRouter)
 router.use('/ensurance-requests', ensuranceRequestsRouter)
 router.use('/proposal', proposalRouter)
 router.use('/roles', rolesRouter)
 router.use('/selected', selectedRouter)
 router.use('/transactions', transactionsRouter)
-router.use('/user', userRouter)
+router.use('/users', userRouter)
 
 module.exports = router
