@@ -11,14 +11,13 @@ const Table = (props: ITableProps) => (
     <thead>
       <tr>
         {props.colNames.length
-          ? Array.from(props.colNames).map((columnName, index) => <th key={index}>{columnName}</th>)
+          ? props.colNames.map((columnName, index) => <th key={index}>{columnName}</th>)
           : undefined}
       </tr>
     </thead>
     <tbody>
-      {props.data.length
-        ? Array.from(props.data).map((rowData, index) => <TableRow key={index} data={rowData} />)
-        : undefined}
+      {props.data.length ? props.data.map((rowData, index) => <TableRow key={index} data={rowData} />) : undefined}
+      
     </tbody>
   </table>
 );

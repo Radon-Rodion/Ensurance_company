@@ -1,4 +1,4 @@
-import NavButton from "../components/navbutton";
+import NavButton from "../elements/navbutton";
 
 const Home = () => (
   <>
