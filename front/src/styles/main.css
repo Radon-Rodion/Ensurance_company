@@ -1,0 +1,12 @@
+@import "normalize.css";
+@import "sanitize.css";
+@import "fontface.css";
+
+body {
+  font-family: "OpenSans-Regular", sans-serif;
+}
+
+::placeholder {
+  /*test for autoprefixer in postcss*/
+  color: antiquewhite;
+}

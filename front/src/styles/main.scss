@@ -1,0 +1,15 @@
+@import "normalize.css";
+@import "sanitize.css";
+
+body {
+  color: $basicColor;
+  margin-top: 52px;
+}
+
+#modal {
+  position: absolute;
+  z-index: 999;
+  top: 0;
+  margin-left: 10%;
+  width: 80%;
+}
