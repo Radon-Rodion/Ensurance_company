@@ -8,7 +8,7 @@ const DEFAULT_URI = "http://localhost:5000/";
 const PAGE = "PAGE";
 
 const defaultState: { page: Page } = {
-  page: JSON.parse(localStorage.getItem(PAGE) ?? `{"uri":${DEFAULT_URI}}`),
+  page: JSON.parse(localStorage.getItem(PAGE) ?? `{"uri":"${DEFAULT_URI}"}`),
 };
 
 const pageReducer = (state = defaultState, action: UserAction) => {
