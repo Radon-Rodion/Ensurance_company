@@ -1,3 +1,4 @@
+import React from "react";
 import { NavLink } from "react-router-dom";
 
 interface INavButtonProps {
@@ -6,4 +7,4 @@ interface INavButtonProps {
 }
 
 const NavButton = (props: INavButtonProps) => <NavLink to={props.to}>{props.name}</NavLink>;
-export default NavButton;
+export default React.memo(NavButton);
