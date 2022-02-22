@@ -36,6 +36,13 @@ class UserController {
     }
     return res.json(resp);
   }
+
+  async create(req, res) {
+    const {user_id , first_name, last_name, passwordHash, email, passportNumber, phone_number, bank_number, status}  = req.body;
+    const type = await Users.create({user_id , first_name, last_name, passwordHash, email, passportNumber, phone_number, bank_number, status });
+    return res.json(type);
+  }
+
 }
 
 const userController = new UserController();
