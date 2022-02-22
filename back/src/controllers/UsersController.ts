@@ -37,12 +37,16 @@ class UserController {
     return res.json(resp);
   }
 
-  async create(req, res) {
-    const {user_id , first_name, last_name, passwordHash, email, passportNumber, phone_number, bank_number, status}  = req.body;
-    const type = await Users.create({user_id , first_name, last_name, passwordHash, email, passportNumber, phone_number, bank_number, status });
-    return res.json(type);
+  static parseRow = (user: any) => {
+    const arr = new Array<string>();
+    return [user.user_id, user.first_name, user.last_name, user.passwordHash, user.email, user.passportNumber, user.phone_number, user.bank_number, user.status, user.roleRoleId];
   }
 
+  async create(req, res) {
+    const [user_id , first_name, last_name, passwordHash, email, passportNumber, phone_number, bank_number, status, role_id]  = req.body;
+    const type = await Users.create({user_id , first_name, last_name, passwordHash, email, passportNumber, phone_number, bank_number, status, role_id}); 
+    return res.json(UserController.parseRow(type));
+  }
 }
 
 const userController = new UserController();
