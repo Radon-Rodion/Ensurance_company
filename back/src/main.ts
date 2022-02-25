@@ -6,10 +6,10 @@
 //   await app.listen(5000);
 // }
 // bootstrap();
-import { config } from 'dotenv';
+import {config} from 'dotenv';
 //import express from 'express';
-import { sequelize } from './db';
-import models from './models/models';
+import {sequelize} from './db';
+import {models} from './models/models';
 import fileUpload = require('express-fileupload');
 import router from './routes/index';
 //import errorHandler from './middleware/ErrorHandlingMiddleware';
@@ -31,13 +31,13 @@ app.use('/api', router);
 //app.use(errorHandler)
 
 const start = async () => {
-  try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-  } catch (e) {
-    console.log(e);
-  }
+    try {
+        await sequelize.authenticate();
+        await sequelize.sync();
+        app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+    } catch (e) {
+        console.log(e);
+    }
 };
 
 start();
