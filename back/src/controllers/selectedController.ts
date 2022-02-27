@@ -1,4 +1,5 @@
 import {models} from '../models/models';
+import validator from "../validations/validator";
 
 let Selected = models.Selected;
 
@@ -38,46 +39,58 @@ class SelectedController {
     }
 
     async create(req, res) {
-        const [
-            id,
-            adding_date,
-            catalogue_id,
-            user_id
-        ] = req.body;
-        const type = await Selected.create({
-            id,
-            adding_date,
-            catalogue_id,
-            user_id
-        });
-        return res.json(SelectedController.parseRow(type));
+        try {
+            const [
+                id,
+                adding_date,
+                catalogue_id,
+                user_id
+            ] = req.body;
+            const type = await Selected.create({
+                id,
+                adding_date,
+                catalogue_id,
+                user_id
+            });
+            return res.json(SelectedController.parseRow(type));
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async update(req, res) {
-        let array = [];
-        array = req.body.data;
-        for (let i = 0; i < array.length; i++) {
-            await Selected.update(
-                {
-                    adding_date: array[i][1],
-                    catalogueId: array[i][2],
-                    userUserId: array[i][3],
-                },
-                {
-                    where: {id: array[i][0]}
-                }
-            )
+        try {
+            let array = [];
+            array = req.body.data;
+            for (let i = 0; i < array.length; i++) {
+                await Selected.update(
+                    {
+                        adding_date: array[i][1],
+                        catalogueId: array[i][2],
+                        userUserId: array[i][3],
+                    },
+                    {
+                        where: {id: array[i][0]}
+                    }
+                )
+            }
+            return res.json(array);
+        } catch (e) {
+            res.status(406).send(e.message);
         }
-        return res.json(array);
     }
 
     async delete(req, res) {
-        let id = req.path.toString().substring(1);
-        console.log(id)
-        await Selected.destroy({
-            where: {id: +id}
-        });
-        res.sendStatus(200);
+        try {
+            let id = req.path.toString().substring(1);
+            console.log(id)
+            await Selected.destroy({
+                where: {id: +id}
+            });
+            res.sendStatus(200);
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 }
 

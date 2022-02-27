@@ -56,64 +56,76 @@ class UsersController {
     }
 
     async create(req, res) {
-        const [
-            user_id,
-            first_name,
-            last_name,
-            passwordHash,
-            email,
-            passportNumber,
-            phone_number,
-            bank_number,
-            status,
-            role_id
-        ] = req.body;
-        const type = await Users.create({
-            user_id,
-            first_name,
-            last_name,
-            passwordHash,
-            email,
-            passportNumber,
-            phone_number,
-            bank_number,
-            status,
-            role_id
-        });
-        return res.json(UsersController.parseRow(type));
+        try {
+            const [
+                user_id,
+                first_name,
+                last_name,
+                passwordHash,
+                email,
+                passportNumber,
+                phone_number,
+                bank_number,
+                status,
+                role_id
+            ] = req.body;
+            const type = await Users.create({
+                user_id,
+                first_name,
+                last_name,
+                passwordHash,
+                email,
+                passportNumber,
+                phone_number,
+                bank_number,
+                status,
+                role_id
+            });
+            return res.json(UsersController.parseRow(type));
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async update(req, res) {
-        let array = [];
-        array = req.body.data;
-        for (let i = 0; i < array.length; i++) {
-            await Users.update(
-                {
-                    first_name: array[i][1],
-                    last_name: array[i][2],
-                    passwordHash: array[i][3],
-                    email: array[i][4],
-                    passportNumber: array[i][5],
-                    phone_number: array[i][6],
-                    bank_number: array[i][6],
-                    status: array[i][6],
-                    roleRoleId: array[i][6],
-                },
-                {
-                    where: {user_id: array[i][0]}
-                }
-            )
+        try {
+            let array = [];
+            array = req.body.data;
+            for (let i = 0; i < array.length; i++) {
+                await Users.update(
+                    {
+                        first_name: array[i][1],
+                        last_name: array[i][2],
+                        passwordHash: array[i][3],
+                        email: array[i][4],
+                        passportNumber: array[i][5],
+                        phone_number: array[i][6],
+                        bank_number: array[i][6],
+                        status: array[i][6],
+                        roleRoleId: array[i][6],
+                    },
+                    {
+                        where: {user_id: array[i][0]}
+                    }
+                )
+            }
+            return res.json(array);
+        } catch (e) {
+            res.status(406).send(e.message);
         }
-        return res.json(array);
     }
 
     async delete(req, res) {
-        let id = req.path.toString().substring(1);
-        console.log(id)
-        await Users.destroy({
-            where: {user_id: +id}
-        });
-        res.sendStatus(200);
+        try {
+            let id = req.path.toString().substring(1);
+            console.log(id)
+            await Users.destroy({
+                where: {user_id: +id}
+            });
+            res.sendStatus(200);
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 }
 

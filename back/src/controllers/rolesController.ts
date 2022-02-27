@@ -1,4 +1,5 @@
 import {models} from '../models/models';
+import validator from "../validations/validator";
 
 let Roles = models.Roles;
 
@@ -32,40 +33,54 @@ class RolesController {
     }
 
     async create(req, res) {
-        let [
-            role_id,
-            role_name
-        ] = req.body;
-        const type = await Roles.create({
-            role_id,
-            role_name
-        });
-        return res.json(RolesController.parseRow(type));
+        try {
+            let [
+                role_id,
+                role_name
+            ] = req.body;
+            const type = await Roles.create({
+                role_id,
+                role_name
+            });
+            return res.json(RolesController.parseRow(type));
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async delete(req, res) {
-        let id = req.path.toString().substring(1);
-        console.log(id)
-        await Roles.destroy({
-            where: {role_id: +id}
-        });
-        res.sendStatus(200);
+        try {
+            let id = req.path.toString().substring(1);
+            console.log(id)
+            await Roles.destroy({
+                where: {role_id: +id}
+            });
+            res.sendStatus(200);
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async update(req, res) {
-        let array = [];
-        array = req.body.data;
-        for (let i = 0; i < array.length; i++) {
-            await Roles.update(
-                {
-                    role_name: array[i][1]
-                },
-                {
-                    where: {role_id: array[i][0]}
-                }
-            )
+        try {
+            let array = [];
+            array = req.body;
+            console.log(array[0][0]);
+            for (let i = 0; i < array.length; i++) {
+                await Roles.update(
+                    {
+                        role_name: array[i][1]
+                    },
+                    {
+                        where: {role_id: array[i][0]}
+                    }
+                )
+            }
+            console.log(array);
+            return res.json(array);
+        } catch (e) {
+            res.status(406).send(e.message);
         }
-        return res.json(array);
     }
 }
 

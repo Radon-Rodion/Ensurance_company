@@ -41,49 +41,61 @@ class TransactionsController {
     }
 
     async create(req, res) {
-        const [
-            transaction_id,
-            transaction_sum,
-            transaction_date,
-            sender_bank_number,
-            reciever_bank_number
-        ] = req.body;
-        const type = await Transactions.create({
-            transaction_id,
-            transaction_sum,
-            transaction_date,
-            sender_bank_number,
-            reciever_bank_number
-        });
-        return res.json(TransactionsController.parseRow(type));
+        try {
+            const [
+                transaction_id,
+                transaction_sum,
+                transaction_date,
+                sender_bank_number,
+                reciever_bank_number
+            ] = req.body;
+            const type = await Transactions.create({
+                transaction_id,
+                transaction_sum,
+                transaction_date,
+                sender_bank_number,
+                reciever_bank_number
+            });
+            return res.json(TransactionsController.parseRow(type));
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async update(req, res) {
-        let array = [];
-        array = req.body.data;
-        for (let i = 0; i < array.length; i++) {
-            await Transactions.update(
-                {
-                    transaction_sum: array[i][1],
-                    transaction_date: array[i][2],
-                    sender_bank_number: array[i][3],
-                    reciever_bank_number: array[i][4],
-                },
-                {
-                    where: {transaction_id: array[i][0]}
-                }
-            )
+        try {
+            let array = [];
+            array = req.body.data;
+            for (let i = 0; i < array.length; i++) {
+                await Transactions.update(
+                    {
+                        transaction_sum: array[i][1],
+                        transaction_date: array[i][2],
+                        sender_bank_number: array[i][3],
+                        reciever_bank_number: array[i][4],
+                    },
+                    {
+                        where: {transaction_id: array[i][0]}
+                    }
+                )
+            }
+            return res.json(array);
+        } catch (e) {
+            res.status(406).send(e.message);
         }
-        return res.json(array);
     }
 
     async delete(req, res) {
-        let id = req.path.toString().substring(1);
-        console.log(id)
-        await Transactions.destroy({
-            where: {transaction_id: +id}
-        });
-        res.sendStatus(200);
+        try {
+            let id = req.path.toString().substring(1);
+            console.log(id)
+            await Transactions.destroy({
+                where: {transaction_id: +id}
+            });
+            res.sendStatus(200);
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 }
 

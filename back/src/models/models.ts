@@ -6,25 +6,74 @@ const Proposal = sequelize.define('proposal', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        unique: true,
+        validate: {
+            isInt: true,
+        }
     },
-    proposal_name: {type: DataTypes.STRING},
-    description: {type: DataTypes.STRING},
+    proposal_name: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
+    description: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
 });
 
 const Catalogue = sequelize.define('catalogue', {
-    addition_date: {type: DataTypes.DATE},
-    price_per_year: {type: DataTypes.INTEGER},
+    addition_date: {
+        type: DataTypes.DATE,
+        validate: {
+            isDate: true,
+        }
+    },
+    price_per_year: {
+        type: DataTypes.INTEGER,
+        validate: {
+            isInt: true
+        }
+    },
 });
 
 const Selected = sequelize.define('selected', {
-    adding_date: {type: DataTypes.DATE},
+    adding_date: {
+        type: DataTypes.DATE,
+        validate: {
+            isDate: true,
+        }
+    },
 });
 
 const EnsuranceRequests = sequelize.define('ensurance_requests', {
-    user_comment: {type: DataTypes.STRING},
-    photo_approvement: {type: DataTypes.BLOB, allowNull: true},
-    request_date: {type: DataTypes.DATE},
-    status: {type: DataTypes.STRING},
+    user_comment: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
+    photo_approvement: {
+        type: DataTypes.STRING, allowNull: true,
+        validate: {
+            isUrl: true
+        }
+    },
+    request_date: {
+        type: DataTypes.DATE,
+        validate: {
+            isDate: true,
+        }
+    },
+    status: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
 });
 
 const Contracts = sequelize.define('contracts', {
@@ -32,27 +81,122 @@ const Contracts = sequelize.define('contracts', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        validate: {
+            isInt: true,
+        }
     },
-    real_price: {type: DataTypes.INTEGER},
-    status: {type: DataTypes.STRING},
-    request_date: {type: DataTypes.DATE},
+    real_price: {
+        type: DataTypes.INTEGER,
+        validate: {
+            isInt: true,
+        }
+    },
+    status: {
+        type: DataTypes.STRING,
+        validate: {
+
+            notEmpty: true,
+        }
+    },
+    request_date: {
+        type: DataTypes.DATE,
+        validate: {
+            isDate: true,
+        }
+    },
 });
 
 const Users = sequelize.define('users', {
-    user_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    first_name: {type: DataTypes.STRING},
-    last_name: {type: DataTypes.STRING},
-    passwordHash: {type: DataTypes.STRING},
-    email: {type: DataTypes.STRING},
-    passportNumber: {type: DataTypes.STRING},
-    phone_number: {type: DataTypes.STRING},
-    bank_number: {type: DataTypes.STRING},
-    status: {type: DataTypes.STRING},
+    user_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        unique: true,
+        validate: {
+            isInt: true,
+        }
+    },
+    first_name: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
+    last_name: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
+    passwordHash: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
+    email: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            isEmail: true,
+        }
+    },
+    passportNumber: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            isPassportNumber(value) {
+                let regExp = new RegExp("\\d{7}[A-Z]\\d{3}[A-Z]{2}\\d");
+                if (!regExp.test(value)) {
+                    throw new Error('Not correct passport number');
+                }
+            }
+        }
+    },
+    phone_number: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            isPhoneNumber(value) {
+                let regExp = new RegExp("^((8|\\+374|\\+994|\\+995|\\+375|\\+7|\\+380|\\+38|\\+996|\\+998|\\+993)[\\- ]?)?\\(?\\d{3,5}\\)?[\\- ]?\\d{1}[\\- ]?\\d{1}[\\- ]?\\d{1}[\\- ]?\\d{1}[\\- ]?\\d{1}(([\\- ]?\\d{1})?[\\- ]?\\d{1})?$");
+                if (!regExp.test(value)) {
+                    throw new Error('Not correct phone number');
+                }
+            }
+        }
+    },
+    bank_number: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            isCreditCard: true,
+            isCardNumber: true
+        }
+    },
+    status: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
 });
 
 const Roles = sequelize.define('roles', {
-    role_id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    role_name: {type: DataTypes.STRING},
+    role_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        validate: {
+            notEmpty: true,
+            isInt: true,
+        }
+    },
+    role_name: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+        }
+    },
 });
 
 const Transactions = sequelize.define('transactions', {
@@ -60,11 +204,38 @@ const Transactions = sequelize.define('transactions', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+        validate: {
+            notEmpty: true,
+        }
     },
-    transaction_sum: {type: DataTypes.INTEGER},
-    transaction_date: {type: DataTypes.DATE},
-    sender_bank_number: {type: DataTypes.STRING},
-    reciever_bank_number: {type: DataTypes.STRING},
+    transaction_sum: {
+        type: DataTypes.INTEGER,
+        validate: {
+            notEmpty: true,
+            isInt: true,
+        }
+    },
+    transaction_date: {
+        type: DataTypes.DATE,
+        validate: {
+            notEmpty: true,
+        }
+    },
+    sender_bank_number: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            isCreditCard: true,
+
+        }
+    },
+    reciever_bank_number: {
+        type: DataTypes.STRING,
+        validate: {
+            notEmpty: true,
+            isCreditCard: true,
+        }
+    },
 });
 
 const ContractTransactions = sequelize.define('contract_transactions', {});

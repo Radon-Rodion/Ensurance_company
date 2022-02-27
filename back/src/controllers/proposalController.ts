@@ -35,43 +35,55 @@ class ProposalController {
     }
 
     async create(req, res) {
-        let [
-            proposal_id,
-            proposal_name,
-            description
-        ] = req.body;
-        const type = await Proposal.create({
-            proposal_id,
-            proposal_name,
-            description
-        });
-        return res.json(ProposalController.parseRow(type));
+        try {
+            let [
+                proposal_id,
+                proposal_name,
+                description
+            ] = req.body;
+            const type = await Proposal.create({
+                proposal_id,
+                proposal_name,
+                description
+            });
+            return res.json(ProposalController.parseRow(type));
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async update(req, res) {
-        let array = [];
-        array = req.body.data;
-        for (let i = 0; i < array.length; i++) {
-            await Proposal.update(
-                {
-                    proposal_name: array[i][1],
-                    description: array[i][2],
-                },
-                {
-                    where: {proposal_id: array[i][0]}
-                }
-            )
+        try {
+            let array = [];
+            array = req.body.data;
+            for (let i = 0; i < array.length; i++) {
+                await Proposal.update(
+                    {
+                        proposal_name: array[i][1],
+                        description: array[i][2],
+                    },
+                    {
+                        where: {proposal_id: array[i][0]}
+                    }
+                )
+            }
+            return res.json(array);
+        } catch (e) {
+            res.status(406).send(e.message);
         }
-        return res.json(array);
     }
 
     async delete(req, res) {
-        let id = req.path.toString().substring(1);
-        console.log(id)
-        await Proposal.destroy({
-            where: {proposal_id: +id}
-        });
-        res.sendStatus(200);
+        try {
+            let id = req.path.toString().substring(1);
+            console.log(id)
+            await Proposal.destroy({
+                where: {proposal_id: +id}
+            });
+            res.sendStatus(200);
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 }
 

@@ -38,46 +38,58 @@ class CatalogueController {
     }
 
     async create(req, res) {
-        const [
-            id,
-            adding_date,
-            catalogue_id,
-            proposal_id
-        ] = req.body;
-        const type = await Catalogue.create({
-            id,
-            adding_date,
-            catalogue_id,
-            proposal_id
-        });
-        return res.json(CatalogueController.parseRow(type));
+        try {
+            const [
+                id,
+                adding_date,
+                catalogue_id,
+                proposal_id
+            ] = req.body;
+            const type = await Catalogue.create({
+                id,
+                adding_date,
+                catalogue_id,
+                proposal_id
+            });
+            return res.json(CatalogueController.parseRow(type));
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
     async update(req, res) {
-        let array = [];
-        array = req.body.data;
-        for (let i = 0; i < array.length; i++) {
-            await Catalogue.update(
-                {
-                    adding_date: array[i][1],
-                    catalogueId: array[i][2],
-                    proposalProposalId: array[i][3],
-                },
-                {
-                    where: {id: array[i][0]}
-                }
-            )
+        try {
+            let array = [];
+            array = req.body.data;
+            for (let i = 0; i < array.length; i++) {
+                await Catalogue.update(
+                    {
+                        adding_date: array[i][1],
+                        catalogueId: array[i][2],
+                        proposalProposalId: array[i][3],
+                    },
+                    {
+                        where: {id: array[i][0]}
+                    }
+                )
+            }
+            return res.json(array);
+        } catch (e) {
+            res.status(406).send(e.message);
         }
-        return res.json(array);
     }
 
     async delete(req, res) {
-        let id = req.path.toString().substring(1);
-        console.log(id)
-        await Catalogue.destroy({
-            where: {id: +id}
-        });
-        res.sendStatus(200);
+        try {
+            let id = req.path.toString().substring(1);
+            console.log(id)
+            await Catalogue.destroy({
+                where: {id: +id}
+            });
+            res.sendStatus(200);
+        } catch (e) {
+            res.status(406).send(e.message);
+        }
     }
 
 }
