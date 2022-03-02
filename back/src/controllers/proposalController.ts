@@ -36,15 +36,12 @@ class ProposalController {
 
     async create(req, res) {
         try {
-            let [
-                proposal_id,
-                proposal_name,
-                description
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await Proposal.create({
-                proposal_id,
-                proposal_name,
-                description
+                proposal_id: array[0],
+                proposal_name: array[1],
+                description: array[2]
             });
             return res.json(ProposalController.parseRow(type));
         } catch (e) {

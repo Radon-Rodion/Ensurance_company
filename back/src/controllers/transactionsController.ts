@@ -42,19 +42,14 @@ class TransactionsController {
 
     async create(req, res) {
         try {
-            const [
-                transaction_id,
-                transaction_sum,
-                transaction_date,
-                sender_bank_number,
-                reciever_bank_number
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await Transactions.create({
-                transaction_id,
-                transaction_sum,
-                transaction_date,
-                sender_bank_number,
-                reciever_bank_number
+                transaction_id: array[0],
+                transaction_sum: array[1],
+                transaction_date: array[2],
+                sender_bank_number: array[3],
+                reciever_bank_number: array[4]
             });
             return res.json(TransactionsController.parseRow(type));
         } catch (e) {

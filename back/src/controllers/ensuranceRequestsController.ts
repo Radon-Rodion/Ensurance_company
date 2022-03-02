@@ -48,23 +48,16 @@ class EnsuranceRequestsController {
 
     async create(req, res) {
         try {
-            const [
-                id,
-                user_comment,
-                photo_approvement,
-                request_date,
-                status,
-                contract_id,
-                transaction_id
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await EnsuranceRequests.create({
-                id,
-                user_comment,
-                photo_approvement,
-                request_date,
-                status,
-                contract_id,
-                transaction_id
+                id: array[0],
+                user_comment: array[1],
+                photo_approvement: array[2],
+                request_date: array[3],
+                status: array[4],
+                contractContractId: array[5],
+                transactionTransactionId: array[6],
             });
             return res.json(EnsuranceRequestsController.parseRow(type));
         } catch (e) {

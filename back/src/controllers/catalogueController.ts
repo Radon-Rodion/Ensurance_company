@@ -31,25 +31,21 @@ class CatalogueController {
         const arr = new Array<string>();
         return [
             Catalogue.id,
-            Catalogue.adding_date,
-            Catalogue.catalogueId,
+            Catalogue.addition_date,
+            Catalogue.price_per_year,
             Catalogue.proposalProposalId
         ];
     }
 
     async create(req, res) {
         try {
-            const [
-                id,
-                adding_date,
-                catalogue_id,
-                proposal_id
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await Catalogue.create({
-                id,
-                adding_date,
-                catalogue_id,
-                proposal_id
+                id: array[0],
+                addition_date: array[1],
+                price_per_year: array[2],
+                proposalProposalId: array[3],
             });
             return res.json(CatalogueController.parseRow(type));
         } catch (e) {
@@ -64,8 +60,8 @@ class CatalogueController {
             for (let i = 0; i < array.length; i++) {
                 await Catalogue.update(
                     {
-                        adding_date: array[i][1],
-                        catalogueId: array[i][2],
+                        addition_date: array[i][1],
+                        price_per_year: array[i][2],
                         proposalProposalId: array[i][3],
                     },
                     {

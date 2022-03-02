@@ -57,29 +57,19 @@ class UsersController {
 
     async create(req, res) {
         try {
-            const [
-                user_id,
-                first_name,
-                last_name,
-                passwordHash,
-                email,
-                passportNumber,
-                phone_number,
-                bank_number,
-                status,
-                role_id
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await Users.create({
-                user_id,
-                first_name,
-                last_name,
-                passwordHash,
-                email,
-                passportNumber,
-                phone_number,
-                bank_number,
-                status,
-                role_id
+                user_id: array[0],
+                first_name: array[1],
+                last_name: array[2],
+                passwordHash: array[3],
+                email: array[4],
+                passportNumber: array[5],
+                phone_number: array[6],
+                bank_number: array[7],
+                status: array[8],
+                roleRoleId: array[9]
             });
             return res.json(UsersController.parseRow(type));
         } catch (e) {
@@ -100,9 +90,9 @@ class UsersController {
                         email: array[i][4],
                         passportNumber: array[i][5],
                         phone_number: array[i][6],
-                        bank_number: array[i][6],
-                        status: array[i][6],
-                        roleRoleId: array[i][6],
+                        bank_number: array[i][7],
+                        status: array[i][8],
+                        roleRoleId: array[i][9],
                     },
                     {
                         where: {user_id: array[i][0]}

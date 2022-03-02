@@ -34,13 +34,12 @@ class RolesController {
 
     async create(req, res) {
         try {
-            let [
-                role_id,
-                role_name
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await Roles.create({
-                role_id,
-                role_name
+                role_id: array[0],
+                role_name: array[1]
+
             });
             return res.json(RolesController.parseRow(type));
         } catch (e) {

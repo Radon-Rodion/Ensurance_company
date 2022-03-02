@@ -40,17 +40,13 @@ class SelectedController {
 
     async create(req, res) {
         try {
-            const [
-                id,
-                adding_date,
-                catalogue_id,
-                user_id
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await Selected.create({
-                id,
-                adding_date,
-                catalogue_id,
-                user_id
+                id: array[0],
+                adding_date: array[1],
+                catalogueId: array[2],
+                userUserId: array[3]
             });
             return res.json(SelectedController.parseRow(type));
         } catch (e) {

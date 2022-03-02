@@ -36,15 +36,12 @@ class ContractTransactionsController {
 
     async create(req, res) {
         try {
-            const [
-                id,
-                transaction_id,
-                contract_id
-            ] = req.body;
+            let array = [];
+            array = req.body;
             const type = await ContractTransactions.create({
-                id,
-                transaction_id,
-                contract_id
+                id: array[0],
+                transactionTransactionId: array[1],
+                contractContractId: array[2]
             });
             return res.json(ContractTransactionsController.parseRow(type));
         } catch (e) {

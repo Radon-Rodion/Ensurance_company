@@ -45,21 +45,16 @@ class ContractsController {
 
     async create(req, res) {
         try {
-            const [
-                contract_id,
-                real_price,
-                status,
-                request_date,
-                user_id,
-                catalogue_id
-            ] = req.body;
+            let array = [];
+            array = req.body;
+
             const type = await Contracts.create({
-                contract_id,
-                real_price,
-                status,
-                request_date,
-                user_id,
-                catalogue_id
+                contract_id: array[0],
+                real_price: array[1],
+                status: array[2],
+                request_date: array[3],
+                userUserId: array[4],
+                catalogueId: array[5]
             });
             return res.json(ContractsController.parseRow(type));
         } catch (e) {
