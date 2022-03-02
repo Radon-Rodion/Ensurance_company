@@ -15,10 +15,10 @@ const PageWithTable = () => {
       const { data } = response;
       const newData = data.filter((val) => +val[0] !== index);
       setResponse({ ...response, data: newData });
+      console.log(response.data);
     };
 
   const addLine = (newLine: string[]) => {
-    console.log(newLine);
     const newData = response.data;
     newData.push(newLine);
     setResponse({ ...response, data: newData });
