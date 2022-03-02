@@ -27,7 +27,12 @@ export const Transactions = sequelize.define('transactions', {
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,
-            isCreditCard: true,
+            isCreditCardNumber(value) {
+                let regExp = new RegExp("(\\d{4}-){3}\\d{4}");
+                if (!regExp.test(value)) {
+                    throw new Error('Not correct credit card number');
+                }
+            }
 
         }
     },
@@ -35,7 +40,12 @@ export const Transactions = sequelize.define('transactions', {
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,
-            isCreditCard: true,
+            isCreditCardNumber(value) {
+                let regExp = new RegExp("(\\d{4}-){3}\\d{4}");
+                if (!regExp.test(value)) {
+                    throw new Error('Not correct credit card number');
+                }
+            }
         }
     },
 });

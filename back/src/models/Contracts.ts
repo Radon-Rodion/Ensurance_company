@@ -19,7 +19,6 @@ export const Contracts = sequelize.define('contracts', {
     status: {
         type: DataTypes.STRING,
         validate: {
-
             notEmpty: true,
         }
     },

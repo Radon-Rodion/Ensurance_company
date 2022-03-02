@@ -11,9 +11,6 @@ export const EnsuranceRequests = sequelize.define('ensurance_requests', {
     },
     photo_approvement: {
         type: DataTypes.STRING, allowNull: true,
-        validate: {
-            isUrl: true
-        }
     },
     request_date: {
         type: DataTypes.DATE,

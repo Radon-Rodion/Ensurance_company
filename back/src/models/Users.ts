@@ -64,8 +64,6 @@ export const Users = sequelize.define('users', {
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,
-            isCreditCard: true,
-            isCardNumber: true
         }
     },
     status: {
