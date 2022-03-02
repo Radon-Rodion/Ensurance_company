@@ -17,7 +17,7 @@ const Table = (props: ITableProps) => (
       <thead>
         <tr>
           {props.colNames.length
-            ? props.colNames.map((columnName, index) => <th key={index}>{columnName}</th>)
+            ? props.colNames.map((columnName) => <th key={columnName}>{columnName}</th>)
             : undefined}
         </tr>
       </thead>
@@ -25,10 +25,10 @@ const Table = (props: ITableProps) => (
         {props.data.length
           ? props.data.map((rowData, index) => (
               <TableRow
-                key={index}
+                key={+rowData[0]}
                 data={rowData}
                 createEditField={props.editFieldCreator(index)}
-                onDelete={props.createDeleteAction(index)}
+                onDelete={props.createDeleteAction(+rowData[0])}
               />
             ))
           : undefined}

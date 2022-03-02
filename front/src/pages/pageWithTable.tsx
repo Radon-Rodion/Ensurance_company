@@ -13,11 +13,12 @@ const PageWithTable = () => {
     (index: number): (() => void) =>
     () => {
       const { data } = response;
-      data.filter((val) => val !== data[index]);
-      setResponse({ ...response, data });
+      const newData = data.filter((val) => +val[0] !== index);
+      setResponse({ ...response, data: newData });
     };
 
   const addLine = (newLine: string[]) => {
+    console.log(newLine);
     const newData = response.data;
     newData.push(newLine);
     setResponse({ ...response, data: newData });

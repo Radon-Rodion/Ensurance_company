@@ -20,7 +20,7 @@ export function updateData<T>(uri: string, data: T, callback: (updatedData: T) =
   // PUT: send all table updated, get all updated info (without columnNames)
   axios
     .put(uri, data)
-    .then((response) => callback(response.data.body))
+    .then((response) => callback(response.data))
     .catch((error) => console.error(error));
 }
 
@@ -28,6 +28,6 @@ export function createData<T>(uri: string, data: T, callback: (newData: T) => vo
   // POST: send new line, get new line added
   axios
     .post(uri, data)
-    .then((response) => callback(response.data.body))
+    .then((response) => callback(response.data))
     .catch((error) => console.error(error));
 }
