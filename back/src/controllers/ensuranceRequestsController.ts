@@ -68,7 +68,7 @@ class EnsuranceRequestsController {
     async update(req, res) {
         try {
             let array = [];
-            array = req.body.data;
+            array = req.body;
             for (let i = 0; i < array.length; i++) {
                 await EnsuranceRequests.update(
                     {
