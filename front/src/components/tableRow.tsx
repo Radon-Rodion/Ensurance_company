@@ -1,6 +1,5 @@
 import React, { FormEvent } from "react";
 import DeleteButton from "@/elements/deletebutton";
-import compareArrays from "@/utils/comparators";
 
 interface ITableRowProps {
   data: Array<string>;
@@ -12,7 +11,7 @@ const TableRow = (props: ITableRowProps) => (
   <tr>
     {props.data.map((element, index) => (
       <td key={index}>
-        <input value={element} onChange={props.createEditField(index)} />
+        <input value={element} onChange={props.createEditField(index)} disabled={index === 0} />
       </td>
     ))}
     <td>
