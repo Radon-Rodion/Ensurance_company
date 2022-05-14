@@ -4,62 +4,39 @@ let EnsuranceRequests = models.EnsuranceRequests;
 
 class EnsuranceRequestsController {
     async getAll(req, res) {
-        const type = await EnsuranceRequests.findAll();
-
+        const type = await EnsuranceRequests.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
-        const resp = {
-            colNames: [
-                "id",
-                "user_comment",
-                "photo_approvement",
-                "request_date",
-                "status",
-                "contract_id",
-                "transaction_id"
-            ],
-            data: [],
-        };
-        for (let i = 0; i < entitiesArr.length; i++) {
-            resp.data.push([
-                entitiesArr[i].id,
-                entitiesArr[i].user_comment,
-                entitiesArr[i].photo_approvement,
-                entitiesArr[i].request_date,
-                entitiesArr[i].status,
-                entitiesArr[i].contractContractId,
-                entitiesArr[i].transactionTransactionId
-            ]);
-        }
-        return res.json(resp);
+        return res.json(entitiesArr);
     }
 
-    static parseRow = (EnsuranceRequests: any) => {
-        const arr = new Array<string>();
-        return [
-            EnsuranceRequests.id,
-            EnsuranceRequests.user_comment,
-            EnsuranceRequests.photo_approvement,
-            EnsuranceRequests.request_date,
-            EnsuranceRequests.status,
-            EnsuranceRequests.contractContractId,
-            EnsuranceRequests.transactionTransactionId,
-        ];
+    async getOne(req, res) {
+        let id = req.path.toString().substring(1);
+        const type = await EnsuranceRequests.findAll(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                where: {id: +id}
+            }
+        );
+        const entity = JSON.parse(JSON.stringify(type));
+        return res.json(entity);
     }
 
     async create(req, res) {
         try {
-            let array = [];
-            array = req.body;
+            let array = JSON.parse(JSON.stringify(req.body));
             const type = await EnsuranceRequests.create({
-                id: array[0],
-                user_comment: array[1],
-                photo_approvement: array[2],
-                request_date: array[3],
-                status: array[4],
-                contractContractId: array[5],
-                transactionTransactionId: array[6],
+                id: array.id,
+                user_comment: array.user_comment,
+                photo_approvement: array.photo_approvement,
+                request_date: array.request_date,
+                status: array.status,
+                contractContractId: array.contractContractId,
+                transactionTransactionId: array.transactionTransactionId,
             });
-            return res.json(EnsuranceRequestsController.parseRow(type));
+            const entity = JSON.parse(JSON.stringify(type));
+            return res.json(entity);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -67,24 +44,21 @@ class EnsuranceRequestsController {
 
     async update(req, res) {
         try {
-            let array = [];
-            array = req.body;
-            for (let i = 0; i < array.length; i++) {
-                await EnsuranceRequests.update(
-                    {
-                        user_comment: array[i][1],
-                        photo_approvement: array[i][2],
-                        request_date: array[i][3],
-                        status: array[i][4],
-                        contractContractId: array[i][5],
-                        transactionTransactionId: array[i][6],
-                    },
-                    {
-                        where: {id: array[i][0]}
-                    }
-                )
-            }
-            return res.json(array);
+            let array = JSON.parse(JSON.stringify(req.body));
+            await EnsuranceRequests.update(
+                {
+                    user_comment: array.user_comment,
+                    photo_approvement: array.photo_approvement,
+                    request_date: array.request_date,
+                    status: array.status,
+                    contractContractId: array.contractContractId,
+                    transactionTransactionId: array.transactionTransactionId,
+                },
+                {
+                    where: {id: array.id}
+                }
+            )
+            res.sendStatus(200);
         } catch (e) {
             res.status(406).send(e.message);
         }

@@ -5,6 +5,7 @@ const router = Router();
 
 router.post('/', rolesController.create);
 router.get('/', rolesController.getAll);
+router.get('/*', rolesController.getOne);
 router.delete('/*', rolesController.delete);
 router.put('/', rolesController.update);
 

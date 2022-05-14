@@ -4,74 +4,42 @@ let Users = models.Users;
 
 class UsersController {
     async getAll(req, res) {
-        const type = await Users.findAll();
-
+        const type = await Users.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
-        const resp = {
-            colNames: [
-                'user_id',
-                'first_name',
-                'last_name',
-                'passwordHash',
-                'email',
-                'passportNumber',
-                'phone_number',
-                'bank_number',
-                'status',
-                'role_id',
-            ],
-            data: [],
-        };
-        for (let i = 0; i < entitiesArr.length; i++) {
-            resp.data.push([
-                entitiesArr[i].user_id,
-                entitiesArr[i].first_name,
-                entitiesArr[i].last_name,
-                entitiesArr[i].passwordHash,
-                entitiesArr[i].email,
-                entitiesArr[i].passportNumber,
-                entitiesArr[i].phone_number,
-                entitiesArr[i].bank_number,
-                entitiesArr[i].status,
-                entitiesArr[i].roleRoleId,
-            ]);
-        }
-        return res.json(resp);
+        return res.json(entitiesArr);
     }
 
-    static parseRow = (user: any) => {
-        const arr = new Array<string>();
-        return [
-            user.user_id,
-            user.first_name,
-            user.last_name,
-            user.passwordHash,
-            user.email,
-            user.passportNumber,
-            user.phone_number,
-            user.bank_number,
-            user.status,
-            user.roleRoleId
-        ];
+    async getOne(req, res) {
+        let id = req.path.toString().substring(1);
+        const type = await Users.findAll(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                where: {id: +id}
+            }
+        );
+        const entity = JSON.parse(JSON.stringify(type));
+        return res.json(entity);
     }
 
     async create(req, res) {
         try {
-            let array = [];
-            array = req.body;
+            let array = JSON.parse(JSON.stringify(req.body));
             const type = await Users.create({
-                user_id: array[0],
-                first_name: array[1],
-                last_name: array[2],
-                passwordHash: array[3],
-                email: array[4],
-                passportNumber: array[5],
-                phone_number: array[6],
-                bank_number: array[7],
-                status: array[8],
-                roleRoleId: array[9]
+                user_id: array.user_id,
+                first_name: array.first_name,
+                last_name: array.last_name,
+                passwordHash: array.passwordHash,
+                email: array.email,
+                passportNumber: array.passportNumber,
+                phone_number: array.phone_number,
+                bank_number: array.bank_number,
+                status: array.status,
+                roleRoleId: array.role_id
             });
-            return res.json(UsersController.parseRow(type));
+            const entity = JSON.parse(JSON.stringify(type));
+            return res.json(entity);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -79,27 +47,24 @@ class UsersController {
 
     async update(req, res) {
         try {
-            let array = [];
-            array = req.body;
-            for (let i = 0; i < array.length; i++) {
-                await Users.update(
-                    {
-                        first_name: array[i][1],
-                        last_name: array[i][2],
-                        passwordHash: array[i][3],
-                        email: array[i][4],
-                        passportNumber: array[i][5],
-                        phone_number: array[i][6],
-                        bank_number: array[i][7],
-                        status: array[i][8],
-                        roleRoleId: array[i][9],
-                    },
-                    {
-                        where: {user_id: array[i][0]}
-                    }
-                )
-            }
-            return res.json(array);
+            let array = JSON.parse(JSON.stringify(req.body));
+            await Users.update(
+                {
+                    first_name: array.first_name,
+                    last_name: array.last_name,
+                    passwordHash: array.passwordHash,
+                    email: array.email,
+                    passportNumber: array.passportNumber,
+                    phone_number: array.phone_number,
+                    bank_number: array.bank_number,
+                    status: array.status,
+                    roleRoleId: array.role_id
+                },
+                {
+                    where: {user_id: array.user_id}
+                }
+            )
+            res.sendStatus(200);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -112,7 +77,7 @@ class UsersController {
             await Users.destroy({
                 where: {user_id: +id}
             });
-            res.sendStatus(200);
+            res.sendStatus(204);
         } catch (e) {
             res.status(406).send(e.message);
         }

@@ -4,46 +4,35 @@ let Proposal = models.Proposal;
 
 class ProposalController {
     async getAll(req, res) {
-        const type = await Proposal.findAll();
-
+        const type = await Proposal.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
-        const resp = {
-            colNames: [
-                "proposal_id",
-                "proposal_name",
-                "description"
-            ],
-            data: [],
-        };
-        for (let i = 0; i < entitiesArr.length; i++) {
-            resp.data.push([
-                entitiesArr[i].proposal_id,
-                entitiesArr[i].proposal_name,
-                entitiesArr[i].description,
-            ]);
-        }
-        return res.json(resp);
+        return res.json(entitiesArr);
     }
 
-    static parseRow = (Proposal: any) => {
-        const arr = new Array<string>();
-        return [
-            Proposal.proposal_id,
-            Proposal.proposal_name,
-            Proposal.description,
-        ];
+    async getOne(req, res) {
+        let id = req.path.toString().substring(1);
+        const type = await Proposal.findAll(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                where: {id: +id}
+            }
+        );
+        const entity = JSON.parse(JSON.stringify(type));
+        return res.json(entity);
     }
 
     async create(req, res) {
         try {
-            let array = [];
-            array = req.body;
+            let array = JSON.parse(JSON.stringify(req.body));
             const type = await Proposal.create({
-                proposal_id: array[0],
-                proposal_name: array[1],
-                description: array[2]
+                proposal_id: array.proposal_id,
+                proposal_name: array.proposal_name,
+                description: array.description
             });
-            return res.json(ProposalController.parseRow(type));
+            const entity = JSON.parse(JSON.stringify(type));
+            return res.json(entity);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -51,20 +40,17 @@ class ProposalController {
 
     async update(req, res) {
         try {
-            let array = [];
-            array = req.body;
-            for (let i = 0; i < array.length; i++) {
-                await Proposal.update(
-                    {
-                        proposal_name: array[i][1],
-                        description: array[i][2],
-                    },
-                    {
-                        where: {proposal_id: array[i][0]}
-                    }
-                )
-            }
-            return res.json(array);
+            let array = JSON.parse(JSON.stringify(req.body));
+            await Proposal.update(
+                {
+                    proposal_name: array.proposal_name,
+                    description: array.description,
+                },
+                {
+                    where: {proposal_id: array.proposal_id}
+                }
+            )
+            res.sendStatus(200);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -77,7 +63,7 @@ class ProposalController {
             await Proposal.destroy({
                 where: {proposal_id: +id}
             });
-            res.sendStatus(200);
+            res.sendStatus(204);
         } catch (e) {
             res.status(406).send(e.message);
         }

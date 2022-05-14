@@ -4,59 +4,38 @@ let Contracts = models.Contracts;
 
 class ContractsController {
     async getAll(req, res) {
-        const type = await Contracts.findAll();
-
+        const type = await Contracts.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
-        let resp = {
-            colNames: [
-                "contract_id",
-                "real_price",
-                "status",
-                "request_date",
-                "user_id",
-                "catalogue_id"
-            ],
-            data: []
-        };
-        for (let i = 0; i < entitiesArr.length; i++) {
-            resp.data.push([
-                entitiesArr[i].contract_id,
-                entitiesArr[i].real_price,
-                entitiesArr[i].status,
-                entitiesArr[i].request_date,
-                entitiesArr[i].userUserId,
-                entitiesArr[i].catalogueId
-            ]);
-        }
-        return res.json(resp);
+        return res.json(entitiesArr);
     }
 
-    static parseRow = (Contracts: any) => {
-        const arr = new Array<string>();
-        return [
-            Contracts.contract_id,
-            Contracts.real_price,
-            Contracts.status,
-            Contracts.request_date,
-            Contracts.userUserId,
-            Contracts.catalogueId
-        ];
+    async getOne(req, res) {
+        let id = req.path.toString().substring(1);
+        const type = await Contracts.findAll(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                where: {id: +id}
+            }
+        );
+        const entity = JSON.parse(JSON.stringify(type));
+        return res.json(entity);
     }
 
     async create(req, res) {
         try {
-            let array = [];
-            array = req.body;
-
+            let array = JSON.parse(JSON.stringify(req.body));
             const type = await Contracts.create({
-                contract_id: array[0],
-                real_price: array[1],
-                status: array[2],
-                request_date: array[3],
-                userUserId: array[4],
-                catalogueId: array[5]
+                contract_id: array.contract_id,
+                real_price: array.real_price,
+                status: array.status,
+                request_date: array.request_date,
+                userUserId: array.userUserId,
+                catalogueId: array.catalogueId
             });
-            return res.json(ContractsController.parseRow(type));
+            const entity = JSON.parse(JSON.stringify(type));
+            return res.json(entity);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -64,23 +43,20 @@ class ContractsController {
 
     async update(req, res) {
         try {
-            let array = [];
-            array = req.body;
-            for (let i = 0; i < array.length; i++) {
-                await Contracts.update(
-                    {
-                        real_price: array[i][1],
-                        status: array[i][2],
-                        request_date: array[i][3],
-                        userUserId: array[i][4],
-                        catalogueId: array[i][5],
-                    },
-                    {
-                        where: {contract_id: array[i][0]}
-                    }
-                )
-            }
-            return res.json(array);
+            let array = JSON.parse(JSON.stringify(req.body));
+            await Contracts.update(
+                {
+                    real_price: array.real_price,
+                    status: array.status,
+                    request_date: array.request_date,
+                    userUserId: array.userUserId,
+                    catalogueId: array.catalogueId
+                },
+                {
+                    where: {contract_id: array.contract_id}
+                }
+            )
+            res.sendStatus(200);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -93,7 +69,7 @@ class ContractsController {
             await Contracts.destroy({
                 where: {contract_id: +id}
             });
-            res.sendStatus(200);
+            res.sendStatus(204);
         } catch (e) {
             res.status(406).send(e.message);
         }

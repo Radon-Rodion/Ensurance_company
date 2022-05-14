@@ -1,47 +1,36 @@
 import {models} from '../models/models';
-import validator from "../validations/validator";
 
 let Roles = models.Roles;
 
 class RolesController {
     async getAll(req, res) {
-        const type = await Roles.findAll();
-
+        const type = await Roles.findAll({
+            attributes: {exclude: ['createdAt', 'updatedAt']},
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
-        const resp = {
-            colNames: [
-                "role_id",
-                "role_name"
-            ],
-            data: [],
-        };
-        for (let i = 0; i < entitiesArr.length; i++) {
-            resp.data.push([
-                entitiesArr[i].role_id,
-                entitiesArr[i].role_name
-            ]);
-        }
-        return res.json(resp);
+        return res.json(entitiesArr);
     }
 
-    static parseRow = (Roles: any) => {
-        const arr = new Array<string>();
-        return [
-            Roles.role_id,
-            Roles.role_name
-        ];
+    async getOne(req, res) {
+        let id = req.path.toString().substring(1);
+        const type = await Roles.findAll(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                where: {role_id: +id}
+            }
+        );
+        const entity = JSON.parse(JSON.stringify(type));
+        return res.json(entity);
     }
 
     async create(req, res) {
         try {
-            let array = [];
-            array = req.body;
+            let array = JSON.parse(JSON.stringify(req.body));
             const type = await Roles.create({
-                role_id: array[0],
-                role_name: array[1]
-
+                role_name: array.role_name
             });
-            return res.json(RolesController.parseRow(type));
+            const entity = JSON.parse(JSON.stringify(type));
+            return res.json(entity);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -54,7 +43,7 @@ class RolesController {
             await Roles.destroy({
                 where: {role_id: +id}
             });
-            res.sendStatus(200);
+            res.sendStatus(204);
         } catch (e) {
             res.status(406).send(e.message);
         }
@@ -62,21 +51,17 @@ class RolesController {
 
     async update(req, res) {
         try {
-            let array = [];
-            array = req.body;
-            console.log(array[0][0]);
-            for (let i = 0; i < array.length; i++) {
-                await Roles.update(
-                    {
-                        role_name: array[i][1]
-                    },
-                    {
-                        where: {role_id: array[i][0]}
-                    }
-                )
-            }
+            let array = JSON.parse(JSON.stringify(req.body));
             console.log(array);
-            return res.json(array);
+            const type = await Roles.update(
+                {
+                    role_name: array.role_name
+                },
+                {
+                    where: {role_id: array.role_id}
+                }
+            )
+            res.sendStatus(200);
         } catch (e) {
             res.status(406).send(e.message);
         }
