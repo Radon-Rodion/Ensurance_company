@@ -1,4 +1,6 @@
 import {models} from '../models/models';
+import {query} from "express";
+import {sequelize} from "../db";
 
 let Proposal = models.Proposal;
 
@@ -7,16 +9,17 @@ class ProposalController {
         const type = await Proposal.findAll({
             attributes: {exclude: ['createdAt', 'updatedAt']},
         });
+
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Proposal.findAll(
+        const type = await Proposal.findOne(
             {
                 attributes: {exclude: ['createdAt', 'updatedAt']},
-                where: {id: +id}
+                where: {proposal_id: +id}
             }
         );
         const entity = JSON.parse(JSON.stringify(type));

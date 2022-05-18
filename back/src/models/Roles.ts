@@ -12,6 +12,7 @@ export const Roles = sequelize.define('roles', {
         }
     },
     role_name: {
+        unique: true,
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,

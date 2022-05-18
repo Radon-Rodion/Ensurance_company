@@ -1,33 +1,46 @@
 import {models} from '../models/models';
+import {Proposal} from "../models/Proposal";
+import {sequelize} from "../db";
+import {QueryTypes} from "sequelize";
 
 let Catalogue = models.Catalogue;
 
 class CatalogueController {
     async getAll(req, res) {
-        const type = await Catalogue.findAll({
-            attributes: {exclude: ['createdAt', 'updatedAt']},
-        });
+        const type = await sequelize.query('SELECT id, addition_date, price_per_year, "proposalProposalId", "proposal_name", "description"\n' +
+            '\tFROM public.catalogues JOIN proposals ON "proposalProposalId"="proposal_id";', {
+            type: QueryTypes.SELECT
+        })
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Catalogue.findAll(
+        const type = await Catalogue.findOne(
             {
                 attributes: {exclude: ['createdAt', 'updatedAt']},
                 where: {id: +id}
             }
         );
-        const entity = JSON.parse(JSON.stringify(type));
+        let entity = JSON.parse(JSON.stringify(type));
+        const extra = await Proposal.findOne(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt', 'proposal_id']},
+                where: {proposal_id: entity.proposalProposalId}
+            }
+        )
+        const extraEntity = JSON.parse(JSON.stringify(extra));
+        entity = {...entity, ...extraEntity};
         return res.json(entity);
     }
 
     async create(req, res) {
         try {
             let array = JSON.parse(JSON.stringify(req.body));
+            let date = new Date();
             const type = await Catalogue.create({
-                addition_date: array.addition_date,
+                addition_date: date,
                 price_per_year: array.price_per_year,
                 proposalProposalId: array.proposalProposalId,
             });

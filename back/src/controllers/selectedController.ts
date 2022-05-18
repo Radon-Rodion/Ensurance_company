@@ -1,12 +1,14 @@
 import {models} from '../models/models';
+import {sequelize} from "../db";
 
 let Selected = models.Selected;
 
 class SelectedController {
     async getAll(req, res) {
-        const type = await Selected.findAll({
-            attributes: {exclude: ['createdAt', 'updatedAt']},
-        });
+        const type = await sequelize.query('SELECT contract_id, real_price, contracts.status, request_date, "userUserId","catalogueId",\n' +
+            '"addition_date","price_per_year", "proposalProposalId","proposal_name", "description"\n' +
+            'FROM public.contracts JOIN catalogues ON "catalogueId"="catalogueId"\n' +
+            'JOIN proposals ON "proposalProposalId"="proposal_id"')
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
@@ -26,9 +28,10 @@ class SelectedController {
     async create(req, res) {
         try {
             let array = JSON.parse(JSON.stringify(req.body));
+            let date = new Date();
             const type = await Selected.create({
-                id: array.id,
-                adding_date: array.adding_date,
+                //id: array.id,
+                adding_date: date,
                 catalogueId: array.catalogueId,
                 userUserId: array.userUserId
             });

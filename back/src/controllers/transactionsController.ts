@@ -26,10 +26,12 @@ class TransactionsController {
     async create(req, res) {
         try {
             let array = JSON.parse(JSON.stringify(req.body));
+            let date = new Date();
+            //console.log(date);
             const type = await Transactions.create({
-                transaction_id: array.transaction_id,
+                //transaction_id: array.transaction_id,
                 transaction_sum: array.transaction_sum,
-                transaction_date: array.transaction_date,
+                transaction_date: date,
                 sender_bank_number: array.sender_bank_number,
                 reciever_bank_number: array.reciever_bank_number
             });

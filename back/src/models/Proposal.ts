@@ -12,6 +12,7 @@ export const Proposal = sequelize.define('proposal', {
         }
     },
     proposal_name: {
+        unique: true,
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,

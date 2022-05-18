@@ -7,13 +7,14 @@ class ContractTransactionsController {
         const type = await ContractTransactions.findAll({
             attributes: {exclude: ['createdAt', 'updatedAt']},
         });
+
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await ContractTransactions.findAll(
+        const type = await ContractTransactions.findOne(
             {
                 attributes: {exclude: ['createdAt', 'updatedAt']},
                 where: {id: +id}

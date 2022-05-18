@@ -13,7 +13,7 @@ class RolesController {
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Roles.findAll(
+        const type = await Roles.findOne(
             {
                 attributes: {exclude: ['createdAt', 'updatedAt']},
                 where: {role_id: +id}

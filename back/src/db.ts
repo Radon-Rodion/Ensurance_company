@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize';
 
 export const sequelize = new Sequelize(
-  'company', // Название БД
+  'databaseForTests', // Название БД
   'postgres', // Пользователь
   'password', // ПАРОЛЬ
   {

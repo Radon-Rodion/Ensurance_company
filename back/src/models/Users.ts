@@ -30,6 +30,7 @@ export const Users = sequelize.define('users', {
         }
     },
     email: {
+        unique: true,
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,
@@ -37,6 +38,7 @@ export const Users = sequelize.define('users', {
         }
     },
     passportNumber: {
+        unique: true,
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,
@@ -49,6 +51,7 @@ export const Users = sequelize.define('users', {
         }
     },
     phone_number: {
+        unique: true,
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,
@@ -61,6 +64,7 @@ export const Users = sequelize.define('users', {
         }
     },
     bank_number: {
+        unique: true,
         type: DataTypes.STRING,
         validate: {
             notEmpty: true,

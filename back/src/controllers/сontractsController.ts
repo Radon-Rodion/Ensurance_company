@@ -1,12 +1,17 @@
 import {models} from '../models/models';
+import {sequelize} from "../db";
 
 let Contracts = models.Contracts;
 
 class ContractsController {
     async getAll(req, res) {
-        const type = await Contracts.findAll({
+        /*const type = await Contracts.findAll({
             attributes: {exclude: ['createdAt', 'updatedAt']},
-        });
+        });*/
+        const type = await sequelize.query('SELECT selecteds.id, adding_date, "catalogueId", "userUserId", "addition_date",\n' +
+            '"price_per_year", "proposalProposalId","proposal_name"\n' +
+            'FROM public.selecteds JOIN catalogues ON "catalogueId"="catalogueId"\n' +
+            'JOIN proposals ON "proposalProposalId"="proposal_id"')
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
@@ -26,11 +31,13 @@ class ContractsController {
     async create(req, res) {
         try {
             let array = JSON.parse(JSON.stringify(req.body));
+            let date = new Date();
+
             const type = await Contracts.create({
-                contract_id: array.contract_id,
-                real_price: array.real_price,
-                status: array.status,
-                request_date: array.request_date,
+                //contract_id: array.contract_id,
+                real_price: array.real_price,//достать из каталога
+                status: "requested",//установить на "requested"
+                request_date: date,
                 userUserId: array.userUserId,
                 catalogueId: array.catalogueId
             });

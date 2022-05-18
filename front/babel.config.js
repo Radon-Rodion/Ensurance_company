@@ -1,5 +1,6 @@
 module.exports = {
   presets: [
+    ['@babel/preset-env', {targets: {node: 'current'}}],
     "@babel/preset-react", // optional: react: this resolves react-files (jsx, tsx)
     "@babel/preset-typescript", // allows  to use TypeScript
     "@babel/preset-env", // compiles your js according with .browserslistrc

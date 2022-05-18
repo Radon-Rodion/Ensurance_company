@@ -13,7 +13,7 @@ class EnsuranceRequestsController {
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await EnsuranceRequests.findAll(
+        const type = await EnsuranceRequests.findOne(
             {
                 attributes: {exclude: ['createdAt', 'updatedAt']},
                 where: {id: +id}
@@ -26,11 +26,12 @@ class EnsuranceRequestsController {
     async create(req, res) {
         try {
             let array = JSON.parse(JSON.stringify(req.body));
+            let date = new Date();
             const type = await EnsuranceRequests.create({
-                id: array.id,
+                //id: array.id,
                 user_comment: array.user_comment,
                 photo_approvement: array.photo_approvement,
-                request_date: array.request_date,
+                request_date: date,
                 status: array.status,
                 contractContractId: array.contractContractId,
                 transactionTransactionId: array.transactionTransactionId,
