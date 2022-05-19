@@ -1,5 +1,7 @@
 import {models} from '../models/models';
 import {sequelize} from "../db";
+import {Catalogue} from "../models/Catalogue";
+import {QueryTypes} from "sequelize";
 
 let Contracts = models.Contracts;
 
@@ -8,24 +10,31 @@ class ContractsController {
         /*const type = await Contracts.findAll({
             attributes: {exclude: ['createdAt', 'updatedAt']},
         });*/
-        const type = await sequelize.query('SELECT selecteds.id, adding_date, "catalogueId", "userUserId", "addition_date",\n' +
-            '"price_per_year", "proposalProposalId","proposal_name"\n' +
-            'FROM public.selecteds JOIN catalogues ON "catalogueId"="catalogueId"\n' +
-            'JOIN proposals ON "proposalProposalId"="proposal_id"')
+        const type = await sequelize.query('SELECT contract_id, real_price, contracts.status, "userUserId","catalogueId",\n' +
+            '"addition_date", "request_date", "price_per_year", "proposalProposalId", "description", "proposal_name"\n' +
+            'FROM public.contracts LEFT JOIN catalogues ON "catalogueId"=catalogues.id\n' +
+            'LEFT JOIN proposals ON "proposalProposalId"=proposal_id', {
+            type: QueryTypes.SELECT
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Contracts.findAll(
-            {
-                attributes: {exclude: ['createdAt', 'updatedAt']},
-                where: {id: +id}
-            }
-        );
-        const entity = JSON.parse(JSON.stringify(type));
-        return res.json(entity);
+        const type = await sequelize.query('SELECT contract_id, real_price, contracts.status, "userUserId","catalogueId",\n' +
+            '"addition_date", "request_date", "price_per_year", "proposalProposalId", "description", "proposal_name"\n' +
+            'FROM public.contracts LEFT JOIN catalogues ON "catalogueId"=catalogues.id\n' +
+            'LEFT JOIN proposals ON "proposalProposalId"=proposal_id WHERE "contract_id"=' +(id) +';', {
+            type: QueryTypes.SELECT
+        });
+        const entitiesArr = JSON.parse(JSON.stringify(type));
+        console.log(entitiesArr.length);
+        if (entitiesArr.length == 0) {
+            res.status(404).send();
+        } else {
+            return res.json(entitiesArr[0]);
+        }
     }
 
     async create(req, res) {

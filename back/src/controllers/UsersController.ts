@@ -1,9 +1,10 @@
 import {models} from '../models/models';
 import {sequelize} from "../db";
 import {QueryTypes} from "sequelize";
-import {equal} from "assert";
+import jwt from "jsonwebtoken";
 
 let Users = models.Users;
+const SECRET_KEY = "random";
 
 class UsersController {
     async getAll(req, res) {
@@ -71,11 +72,11 @@ class UsersController {
                     where: {user_id: array.user_id}
                 }
             ).then((record) => {
-               console.log(record.toString() == '0')
-               /* if (record.toString() == '0'){
-                    res.status(406).send("Invalid id");
-                    return
-                }*/
+                console.log(record.toString() == '0')
+                /* if (record.toString() == '0'){
+                     res.status(406).send("Invalid id");
+                     return
+                 }*/
             })
             res.sendStatus(200);
         } catch (e) {
@@ -90,17 +91,14 @@ class UsersController {
             await Users.destroy({
                 where: {user_id: +id}
             }).then((record) => {
-                console.log(record.toString() == '0')/*
-                if (record.toString() == '0'){
-                    res.status(406).send("Invalid id");
-                    return
-                }*/
+                console.log(record.toString() == '0')
             });
             res.sendStatus(204);
         } catch (e) {
             res.status(406).send(e.message);
         }
     }
+
 }
 
 const usersController = new UsersController();

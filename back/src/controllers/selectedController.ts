@@ -1,28 +1,36 @@
 import {models} from '../models/models';
 import {sequelize} from "../db";
+import {QueryTypes} from "sequelize";
 
 let Selected = models.Selected;
 
 class SelectedController {
     async getAll(req, res) {
-        const type = await sequelize.query('SELECT contract_id, real_price, contracts.status, request_date, "userUserId","catalogueId",\n' +
-            '"addition_date","price_per_year", "proposalProposalId","proposal_name", "description"\n' +
-            'FROM public.contracts JOIN catalogues ON "catalogueId"="catalogueId"\n' +
-            'JOIN proposals ON "proposalProposalId"="proposal_id"')
+        const type = await sequelize.query('SELECT selecteds.id, "adding_date","catalogueId",\n' +
+            '"price_per_year", "proposalProposalId", "description", "proposal_name"\n' +
+            'FROM public.selecteds LEFT JOIN catalogues ON "catalogueId"=catalogues.id\n' +
+            'LEFT JOIN proposals ON "proposalProposalId"=proposal_id', {
+            type: QueryTypes.SELECT
+        });
         const entitiesArr = JSON.parse(JSON.stringify(type));
         return res.json(entitiesArr);
     }
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Selected.findAll(
-            {
-                attributes: {exclude: ['createdAt', 'updatedAt']},
-                where: {id: +id}
-            }
-        );
-        const entity = JSON.parse(JSON.stringify(type));
-        return res.json(entity);
+        const type = await sequelize.query('SELECT selecteds.id, "adding_date","catalogueId",\n' +
+            '"price_per_year", "proposalProposalId", "description", "proposal_name"\n' +
+            'FROM public.selecteds LEFT JOIN catalogues ON "catalogueId"=catalogues.id\n' +
+            'LEFT JOIN proposals ON "proposalProposalId"=proposal_id WHERE selecteds.id=' + (id) + ';', {
+            type: QueryTypes.SELECT
+        });
+        const entitiesArr = JSON.parse(JSON.stringify(type));
+        console.log(entitiesArr.length);
+        if (entitiesArr.length == 0) {
+            res.status(404).send();
+        } else {
+            return res.json(entitiesArr[0]);
+        }
     }
 
     async create(req, res) {

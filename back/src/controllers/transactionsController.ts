@@ -13,14 +13,18 @@ class TransactionsController {
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Transactions.findAll(
+        const type = await Transactions.findOne(
             {
                 attributes: {exclude: ['createdAt', 'updatedAt']},
-                where: {id: +id}
+                where: {transaction_id: +id}
             }
         );
         const entity = JSON.parse(JSON.stringify(type));
-        return res.json(entity);
+        if (entity == null) {
+            res.status(404).send("Message")
+        } else {
+            return res.json(entity);
+        }
     }
 
     async create(req, res) {

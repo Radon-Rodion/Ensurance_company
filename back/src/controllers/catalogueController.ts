@@ -17,22 +17,17 @@ class CatalogueController {
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await Catalogue.findOne(
-            {
-                attributes: {exclude: ['createdAt', 'updatedAt']},
-                where: {id: +id}
-            }
-        );
-        let entity = JSON.parse(JSON.stringify(type));
-        const extra = await Proposal.findOne(
-            {
-                attributes: {exclude: ['createdAt', 'updatedAt', 'proposal_id']},
-                where: {proposal_id: entity.proposalProposalId}
-            }
-        )
-        const extraEntity = JSON.parse(JSON.stringify(extra));
-        entity = {...entity, ...extraEntity};
-        return res.json(entity);
+        const type = await sequelize.query('SELECT id, addition_date, price_per_year, "proposalProposalId", "proposal_name", "description"\n' +
+            '\tFROM public.catalogues JOIN proposals ON "proposalProposalId"="proposal_id" WHERE "id"=' + (id) + ';', {
+            type: QueryTypes.SELECT
+        });
+        const entitiesArr = JSON.parse(JSON.stringify(type));
+        console.log(entitiesArr.length);
+        if (entitiesArr.length == 0) {
+            res.status(404).send();
+        } else {
+            return res.json(entitiesArr[0]);
+        }
     }
 
     async create(req, res) {

@@ -20,7 +20,11 @@ class RolesController {
             }
         );
         const entity = JSON.parse(JSON.stringify(type));
-        return res.json(entity);
+        if (entity == null) {
+            res.status(404).send("No id");
+        } else {
+            return res.json(entity);
+        }
     }
 
     async create(req, res) {

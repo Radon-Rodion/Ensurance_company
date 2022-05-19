@@ -56,7 +56,7 @@ class EnsuranceRequestsController {
                     transactionTransactionId: array.transactionTransactionId,
                 },
                 {
-                    where: {id: array.id}
+                    where: {id: +array.id}
                 }
             )
             res.sendStatus(200);
@@ -72,7 +72,7 @@ class EnsuranceRequestsController {
             await EnsuranceRequests.destroy({
                 where: {id: +id}
             });
-            res.sendStatus(200);
+            res.sendStatus(204);
         } catch (e) {
             res.status(406).send(e.message);
         }
