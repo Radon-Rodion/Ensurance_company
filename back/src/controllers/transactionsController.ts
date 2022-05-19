@@ -20,11 +20,7 @@ class TransactionsController {
             }
         );
         const entity = JSON.parse(JSON.stringify(type));
-        if (entity == null) {
-            res.status(404).send("Message")
-        } else {
-            return res.json(entity);
-        }
+        return res.json(entity);
     }
 
     async create(req, res) {

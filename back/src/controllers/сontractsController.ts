@@ -1,7 +1,7 @@
 import {models} from '../models/models';
 import {sequelize} from "../db";
-import {Catalogue} from "../models/Catalogue";
 import {QueryTypes} from "sequelize";
+import {Catalogue} from "../models/Catalogue";
 
 let Contracts = models.Contracts;
 
@@ -10,10 +10,10 @@ class ContractsController {
         /*const type = await Contracts.findAll({
             attributes: {exclude: ['createdAt', 'updatedAt']},
         });*/
-        const type = await sequelize.query('SELECT contract_id, real_price, contracts.status, "userUserId","catalogueId",\n' +
-            '"addition_date", "request_date", "price_per_year", "proposalProposalId", "description", "proposal_name"\n' +
-            'FROM public.contracts LEFT JOIN catalogues ON "catalogueId"=catalogues.id\n' +
-            'LEFT JOIN proposals ON "proposalProposalId"=proposal_id', {
+        const type = await sequelize.query('SELECT selecteds.id, adding_date, "catalogueId", "userUserId", "addition_date",\n' +
+            '"price_per_year", "proposalProposalId","proposal_name"\n' +
+            'FROM public.selecteds JOIN catalogues ON "catalogueId"="catalogueId"\n' +
+            'JOIN proposals ON "proposalProposalId"="proposal_id"', {
             type: QueryTypes.SELECT
         });
         const entitiesArr = JSON.parse(JSON.stringify(type));
@@ -22,19 +22,14 @@ class ContractsController {
 
     async getOne(req, res) {
         let id = req.path.toString().substring(1);
-        const type = await sequelize.query('SELECT contract_id, real_price, contracts.status, "userUserId","catalogueId",\n' +
-            '"addition_date", "request_date", "price_per_year", "proposalProposalId", "description", "proposal_name"\n' +
-            'FROM public.contracts LEFT JOIN catalogues ON "catalogueId"=catalogues.id\n' +
-            'LEFT JOIN proposals ON "proposalProposalId"=proposal_id WHERE "contract_id"=' +(id) +';', {
-            type: QueryTypes.SELECT
-        });
-        const entitiesArr = JSON.parse(JSON.stringify(type));
-        console.log(entitiesArr.length);
-        if (entitiesArr.length == 0) {
-            res.status(404).send();
-        } else {
-            return res.json(entitiesArr[0]);
-        }
+        const type = await Contracts.findOne(
+            {
+                attributes: {exclude: ['createdAt', 'updatedAt']},
+                where: {id: +id}
+            }
+        );
+        const entity = JSON.parse(JSON.stringify(type));
+        return res.json(entity);
     }
 
     async create(req, res) {
@@ -42,13 +37,19 @@ class ContractsController {
             let array = JSON.parse(JSON.stringify(req.body));
             let date = new Date();
 
+            const price = await Catalogue.findOne(
+                {
+                    where: {id: array.catalogue_id}
+                }
+            )
+            const price2 = JSON.parse(JSON.stringify(price));
             const type = await Contracts.create({
                 //contract_id: array.contract_id,
-                real_price: array.real_price,//достать из каталога
+                real_price: price2.price_per_year,//достать из каталога
                 status: "requested",//установить на "requested"
                 request_date: date,
-                userUserId: array.userUserId,
-                catalogueId: array.catalogueId
+                userUserId: array.user_id,
+                catalogueId: array.catalogue_id
             });
             const entity = JSON.parse(JSON.stringify(type));
             return res.json(entity);
