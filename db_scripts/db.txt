@@ -39,13 +39,13 @@ INSERT INTO public.roles(
 
 INSERT INTO public.users(
 	first_name, last_name, "passwordHash", email, "passportNumber", phone_number, bank_number, status, "createdAt", "updatedAt", "roleRoleId")
-	VALUES ('Pavel', 'Rafeev', '######', '#####', '####', '####', '####', 'active', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 2);
+	VALUES ('Pavel', 'Rafeev', '####', 'voytforblr@gmail.com', '7449552A001PB7', '+375296146698', '4444-4444-4444-4445', 'active', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 2);
 INSERT INTO public.users(
 	first_name, last_name, "passwordHash", email, "passportNumber", phone_number, bank_number, status, "createdAt", "updatedAt", "roleRoleId")
-	VALUES ('Ilya', 'Labovich', '######', '#####', '####', '####', '####', 'deleted', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 5);
+	VALUES ('Ilya', 'Labovich', '######', 'labovich@mail.ru', '7449552A001PB8', '+375296146699', '4444-4444-4444-4446', 'deleted', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 5);
 INSERT INTO public.users(
 	first_name, last_name, "passwordHash", email, "passportNumber", phone_number, bank_number, status, "createdAt", "updatedAt", "roleRoleId")
-	VALUES ('Egor', 'Voitka', '######', '#####', '####', '####', '####', 'unActive', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 4);
+	VALUES ('Egor', 'Voitka', '######', 'labovich@gmail.com', '7449552A001PB0', '+375296146690', '4444-4444-4444-4447', 'unActive', '1999-01-08 04:05:06', '1999-01-08 04:05:06', 4);
 
 INSERT INTO public.contracts(
 	real_price, status, request_date, "createdAt", "updatedAt", "userUserId", "catalogueId")
